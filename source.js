@@ -1,23 +1,9 @@
 'use strict'
-let webSocket
 let fileName
 
 function init() {
   initDropZone()
-  initWebSocket()
-}
-
-function initWebSocket() {
-  webSocket = new WebSocket ('ws://10.85.107.68:9000')
-
-  webSocket.onmessage = function(event) {
-    showDownload()
-    startDownload(event.data)
-  }
-}
-
-function sendUnsignedFile(unsignedFile) {
-  webSocket.send(unsignedFile)
+  initContent()
 }
 
 function initDropZone() {
@@ -35,7 +21,7 @@ function initDropZone() {
 
     filename = event.dataTransfer.files[0].name
     readFile(event.dataTransfer.files[0]).then(file => {
-      sendUnsignedFile(file)
+      prepareContent(file)
     })
   })
 }
@@ -56,7 +42,7 @@ function inputFilesSelected(filesList) {
   changeDropZone()
   fileName = filesList[0].name
   readFile(filesList[0]).then(file => {
-    sendUnsignedFile(file)
+    prepareContent(file)
   })
 }
 
@@ -79,4 +65,13 @@ function startDownload(signedFile) {
   document.body.appendChild(link)
 
   link.click()
+}
+
+function initContent() {
+
+}
+
+function prepareContent(file) {
+  let content = document.getElementById('content')
+  content.innerHTML = file
 }
